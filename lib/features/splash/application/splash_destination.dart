@@ -1,0 +1,1 @@
+enum SplashDestination { authorized, unauthorized }
