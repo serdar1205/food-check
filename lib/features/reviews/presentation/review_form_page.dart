@@ -115,9 +115,10 @@ class _ReviewFormScaffold extends StatelessWidget {
   }
 
   void _goToReceipt(BuildContext context, ReviewFormState state) {
-    Navigator.of(
-      context,
-    ).pushNamed(AppRoutes.receipt, arguments: state.toDraft(restaurant.id));
+    Navigator.of(context).pushNamed(
+      AppRoutes.receipt,
+      arguments: state.toDraft(restaurant.id, restaurant.name),
+    );
   }
 
   @override

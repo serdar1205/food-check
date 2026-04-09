@@ -7,4 +7,12 @@ abstract interface class ProfileRepository {
 
   /// Adds bonus points after a successful review submission (in-memory MVP).
   Future<Result<void, ProfileFailure>> applyBonusAward(int points);
+
+  /// Deducts bonus points (e.g. coupon redeem). Writes matching wallet ledger line.
+  Future<Result<void, ProfileFailure>> spendBonusPoints(
+    int points, {
+    String? ledgerDetail,
+  });
+
+  Future<Result<void, ProfileFailure>> updateDisplayName(String name);
 }

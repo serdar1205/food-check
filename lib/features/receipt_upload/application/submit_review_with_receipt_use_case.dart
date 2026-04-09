@@ -4,6 +4,7 @@ import '../../profile/domain/profile_repository.dart';
 import '../../review_result/domain/review_result.dart';
 import '../../reviews/domain/review_draft.dart';
 import '../../reviews/domain/review_history_repository.dart';
+import '../../reviews/domain/review_moderation_status.dart';
 import '../../reviews/domain/review_repository.dart';
 
 class SubmitReviewWithReceiptUseCase {
@@ -30,7 +31,9 @@ class SubmitReviewWithReceiptUseCase {
           }
           await _historyRepository.recordSuccessfulSubmission(
             restaurantId: draft.restaurantId,
+            restaurantName: draft.restaurantName,
             bonusPoints: value.bonusPoints,
+            initialStatus: ReviewModerationStatus.underReview,
           );
         }
         return Success(value);

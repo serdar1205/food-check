@@ -102,9 +102,12 @@ class ShellProfileTabRoutes {
       case '/':
         return MaterialPageRoute<void>(
           settings: settings,
-          builder: (_) => ProfilePage(
-            dependencies: dependencies,
-            profileCubit: profileCubit,
+          builder: (_) => BlocProvider<ProfileCubit>.value(
+            value: profileCubit,
+            child: ProfilePage(
+              dependencies: dependencies,
+              profileCubit: profileCubit,
+            ),
           ),
         );
       default:

@@ -97,11 +97,11 @@ class ReviewResultSuccessBody extends StatelessWidget {
                 ),
                 const SizedBox(height: 28),
                 _BonusCard(bonusPoints: bonus),
-                const SizedBox(height: 28),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4),
-                  child: ReviewSilkDecoration(),
-                ),
+                // const SizedBox(height: 28),
+                // const Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 4),
+                //   child: ReviewSilkDecoration(),
+                // ),
                 const SizedBox(height: 24),
               ],
             ),

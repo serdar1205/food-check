@@ -1,12 +1,18 @@
 import '../core/constants/splash_constants.dart';
-import '../features/orders/application/get_orders_use_case.dart';
-import '../features/orders/application/orders_list_cubit.dart';
-import '../features/orders/data/orders_repository_impl.dart';
-import '../features/orders/domain/orders_repository.dart';
 import '../features/auth/application/auth_cubit.dart';
 import '../features/auth/application/login_use_case.dart';
 import '../features/auth/data/auth_repository_impl.dart';
 import '../features/auth/domain/auth_repository.dart';
+import '../features/gamification/application/gamification_cubit.dart';
+import '../features/gamification/data/gamification_repository_impl.dart';
+import '../features/gamification/domain/gamification_repository.dart';
+import '../features/notifications/application/notifications_cubit.dart';
+import '../features/notifications/data/notifications_repository_impl.dart';
+import '../features/notifications/domain/notifications_repository.dart';
+import '../features/orders/application/get_orders_use_case.dart';
+import '../features/orders/application/orders_list_cubit.dart';
+import '../features/orders/data/orders_repository_impl.dart';
+import '../features/orders/domain/orders_repository.dart';
 import '../features/profile/application/get_profile_use_case.dart';
 import '../features/profile/application/profile_cubit.dart';
 import '../features/profile/data/profile_repository_impl.dart';
@@ -20,8 +26,12 @@ import '../features/restaurants/application/venue_details_cubit.dart';
 import '../features/restaurants/data/restaurants_repository_impl.dart';
 import '../features/restaurants/domain/restaurant.dart';
 import '../features/restaurants/domain/restaurants_repository.dart';
+import '../features/rewards/application/rewards_list_cubit.dart';
+import '../features/rewards/data/rewards_repository_impl.dart';
+import '../features/rewards/domain/rewards_repository.dart';
 import '../features/reviews/application/get_user_reviews_use_case.dart';
 import '../features/reviews/application/review_form_cubit.dart';
+import '../features/reviews/application/review_history_cubit.dart';
 import '../features/reviews/application/user_reviews_list_cubit.dart';
 import '../features/reviews/data/review_history_repository_impl.dart';
 import '../features/reviews/data/review_repository_impl.dart';
@@ -29,31 +39,74 @@ import '../features/reviews/data/user_reviews_repository_impl.dart';
 import '../features/reviews/domain/review_history_repository.dart';
 import '../features/reviews/domain/review_repository.dart';
 import '../features/reviews/domain/user_reviews_repository.dart';
+import '../features/settings/application/settings_cubit.dart';
 import '../features/splash/application/check_authorization_use_case.dart';
 import '../features/splash/application/splash_cubit.dart';
+import '../features/wallet/application/bonus_wallet_cubit.dart';
+import '../features/wallet/data/bonus_wallet_repository_impl.dart';
+import '../features/wallet/domain/bonus_wallet_repository.dart';
 
 /// Composition root: wires repositories, use cases, and cubit factories.
 class AppDependencies {
-  AppDependencies({
-    this.splashMinDisplayDuration = SplashConstants.minDisplayDuration,
-  }) : authRepository = AuthRepositoryImpl(),
-       restaurantsRepository = RestaurantsRepositoryImpl(),
-       profileRepository = ProfileRepositoryImpl(),
-       reviewRepository = ReviewRepositoryImpl(),
-       reviewHistoryRepository = ReviewHistoryRepositoryImpl(),
-       ordersRepository = OrdersRepositoryImpl(),
-       userReviewsRepository = UserReviewsRepositoryImpl();
+  factory AppDependencies({
+    Duration splashMinDisplayDuration = SplashConstants.minDisplayDuration,
+  }) {
+    final authRepository = AuthRepositoryImpl();
+    final restaurantsRepository = RestaurantsRepositoryImpl();
+    final bonusWalletRepository = BonusWalletRepositoryImpl();
+    final profileRepository = ProfileRepositoryImpl(bonusWalletRepository);
+    final reviewRepository = ReviewRepositoryImpl();
+    final reviewHistoryRepository = ReviewHistoryRepositoryImpl();
+    final ordersRepository = OrdersRepositoryImpl();
+    final userReviewsRepository = UserReviewsRepositoryImpl();
+    final rewardsRepository = RewardsRepositoryImpl(profileRepository);
+    final gamificationRepository = GamificationRepositoryImpl();
+    final notificationsRepository = NotificationsRepositoryImpl();
+    return AppDependencies._(
+      splashMinDisplayDuration: splashMinDisplayDuration,
+      authRepository: authRepository,
+      restaurantsRepository: restaurantsRepository,
+      bonusWalletRepository: bonusWalletRepository,
+      profileRepository: profileRepository,
+      reviewRepository: reviewRepository,
+      reviewHistoryRepository: reviewHistoryRepository,
+      ordersRepository: ordersRepository,
+      userReviewsRepository: userReviewsRepository,
+      rewardsRepository: rewardsRepository,
+      gamificationRepository: gamificationRepository,
+      notificationsRepository: notificationsRepository,
+    );
+  }
+
+  const AppDependencies._({
+    required this.splashMinDisplayDuration,
+    required this.authRepository,
+    required this.restaurantsRepository,
+    required this.bonusWalletRepository,
+    required this.profileRepository,
+    required this.reviewRepository,
+    required this.reviewHistoryRepository,
+    required this.ordersRepository,
+    required this.userReviewsRepository,
+    required this.rewardsRepository,
+    required this.gamificationRepository,
+    required this.notificationsRepository,
+  });
 
   /// Minimum splash visibility; tests may pass [Duration.zero].
   final Duration splashMinDisplayDuration;
 
   final AuthRepository authRepository;
   final RestaurantsRepository restaurantsRepository;
+  final BonusWalletRepository bonusWalletRepository;
   final ProfileRepository profileRepository;
   final ReviewRepository reviewRepository;
   final ReviewHistoryRepository reviewHistoryRepository;
   final OrdersRepository ordersRepository;
   final UserReviewsRepository userReviewsRepository;
+  final RewardsRepository rewardsRepository;
+  final GamificationRepository gamificationRepository;
+  final NotificationsRepository notificationsRepository;
 
   CheckAuthorizationUseCase get _checkAuthorizationUseCase =>
       CheckAuthorizationUseCase(authRepository);
@@ -107,4 +160,22 @@ class AppDependencies {
 
   UserReviewsListCubit createUserReviewsListCubit() =>
       UserReviewsListCubit(_getUserReviewsUseCase);
+
+  ReviewHistoryCubit createReviewHistoryCubit() =>
+      ReviewHistoryCubit(reviewHistoryRepository);
+
+  BonusWalletCubit createBonusWalletCubit() =>
+      BonusWalletCubit(bonusWalletRepository, _getProfileUseCase);
+
+  RewardsListCubit createRewardsListCubit() =>
+      RewardsListCubit(rewardsRepository);
+
+  GamificationCubit createGamificationCubit() =>
+      GamificationCubit(gamificationRepository);
+
+  NotificationsCubit createNotificationsCubit() =>
+      NotificationsCubit(notificationsRepository);
+
+  SettingsCubit createSettingsCubit() =>
+      SettingsCubit(_getProfileUseCase, profileRepository);
 }

@@ -2,6 +2,7 @@
 class ReviewDraft {
   const ReviewDraft({
     required this.restaurantId,
+    required this.restaurantName,
     required this.overallRating,
     required this.foodQuality,
     required this.service,
@@ -16,6 +17,7 @@ class ReviewDraft {
   static const int maxOverall = 5;
 
   final String restaurantId;
+  final String restaurantName;
 
   /// 1–5 stars.
   final int overallRating;

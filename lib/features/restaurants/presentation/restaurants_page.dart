@@ -8,6 +8,7 @@ import '../../../core/constants/restaurant_list_ui_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../application/restaurant_list_cubit.dart';
 import '../application/restaurant_list_filter.dart';
+import '../../notifications/presentation/notifications_page.dart';
 import 'widgets/restaurant_card_tile.dart';
 
 class RestaurantsPage extends StatefulWidget {
@@ -71,9 +72,11 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                       clipBehavior: Clip.antiAlias,
                       child: InkWell(
                         onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Уведомления — в разработке'),
+                          Navigator.of(context).push<void>(
+                            MaterialPageRoute<void>(
+                              builder: (_) => NotificationsPage(
+                                dependencies: widget.dependencies,
+                              ),
                             ),
                           );
                         },

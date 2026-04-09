@@ -10,6 +10,7 @@ void main() {
     final repository = ReviewRepositoryImpl();
     const draft = ReviewDraft(
       restaurantId: '1',
+      restaurantName: 'Test',
       overallRating: 5,
       foodQuality: 8,
       service: 8,

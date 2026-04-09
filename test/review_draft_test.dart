@@ -5,6 +5,7 @@ void main() {
   test('review draft is valid when all criteria are in range', () {
     const draft = ReviewDraft(
       restaurantId: '1',
+      restaurantName: 'Test',
       overallRating: 5,
       foodQuality: 8,
       service: 7,
@@ -18,6 +19,7 @@ void main() {
   test('review draft is invalid when criterion is outside range', () {
     const draft = ReviewDraft(
       restaurantId: '1',
+      restaurantName: 'Test',
       overallRating: 5,
       foodQuality: 0,
       service: 7,
@@ -31,6 +33,7 @@ void main() {
   test('review draft is invalid when overall is out of range', () {
     const draft = ReviewDraft(
       restaurantId: '1',
+      restaurantName: 'Test',
       overallRating: 6,
       foodQuality: 8,
       service: 7,

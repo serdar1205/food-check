@@ -62,15 +62,17 @@ class ReviewFormState {
     );
   }
 
-  ReviewDraft toDraft(String restaurantId) => ReviewDraft(
-    restaurantId: restaurantId,
-    overallRating: overallRating,
-    foodQuality: foodQuality,
-    service: service,
-    atmosphere: atmosphere,
-    priceQuality: priceQuality,
-    comment: comment.isEmpty ? null : comment,
-  );
+  ReviewDraft toDraft(String restaurantId, String restaurantName) =>
+      ReviewDraft(
+        restaurantId: restaurantId,
+        restaurantName: restaurantName,
+        overallRating: overallRating,
+        foodQuality: foodQuality,
+        service: service,
+        atmosphere: atmosphere,
+        priceQuality: priceQuality,
+        comment: comment.isEmpty ? null : comment,
+      );
 }
 
 class ReviewFormCubit extends Cubit<ReviewFormState> {

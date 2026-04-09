@@ -8,11 +8,13 @@ import 'package:food_check/features/review_result/domain/review_result.dart';
 import 'package:food_check/features/reviews/domain/review_draft.dart';
 import 'package:food_check/features/reviews/domain/review_history_entry.dart';
 import 'package:food_check/features/reviews/domain/review_history_repository.dart';
+import 'package:food_check/features/reviews/domain/review_moderation_status.dart';
 import 'package:food_check/features/reviews/domain/review_repository.dart';
 
 void main() {
   final draft = ReviewDraft(
     restaurantId: 'r1',
+    restaurantName: 'Cafe',
     overallRating: 5,
     foodQuality: 8,
     service: 8,
@@ -34,7 +36,12 @@ void main() {
     expect(profile.awardCalls, [50]);
     expect(history.recordCalls.length, 1);
     expect(history.recordCalls.first.restaurantId, 'r1');
+    expect(history.recordCalls.first.restaurantName, 'Cafe');
     expect(history.recordCalls.first.bonusPoints, 50);
+    expect(
+      history.recordCalls.first.initialStatus,
+      ReviewModerationStatus.underReview,
+    );
   });
 
   test('does not apply bonus or history on failure', () async {
@@ -77,13 +84,34 @@ class _FakeProfileRepository implements ProfileRepository {
   }
 
   @override
+  Future<Result<void, ProfileFailure>> spendBonusPoints(
+    int points, {
+    String? ledgerDetail,
+  }) async {
+    return const Success(null);
+  }
+
+  @override
+  Future<Result<void, ProfileFailure>> updateDisplayName(String name) async {
+    return const Success(null);
+  }
+
+  @override
   Future<Result<UserProfile, ProfileFailure>> getProfile() async {
     throw UnimplementedError();
   }
 }
 
 class _FakeReviewHistoryRepository implements ReviewHistoryRepository {
-  final List<({String restaurantId, int bonusPoints})> recordCalls = [];
+  final List<
+    ({
+      String restaurantId,
+      String restaurantName,
+      int bonusPoints,
+      ReviewModerationStatus initialStatus,
+    })
+  >
+  recordCalls = [];
 
   @override
   Future<List<ReviewHistoryEntry>> listEntries() async => [];
@@ -91,8 +119,15 @@ class _FakeReviewHistoryRepository implements ReviewHistoryRepository {
   @override
   Future<void> recordSuccessfulSubmission({
     required String restaurantId,
+    required String restaurantName,
     required int bonusPoints,
+    required ReviewModerationStatus initialStatus,
   }) async {
-    recordCalls.add((restaurantId: restaurantId, bonusPoints: bonusPoints));
+    recordCalls.add((
+      restaurantId: restaurantId,
+      restaurantName: restaurantName,
+      bonusPoints: bonusPoints,
+      initialStatus: initialStatus,
+    ));
   }
 }
