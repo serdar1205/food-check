@@ -73,7 +73,10 @@ class _AuthPageState extends State<AuthPage> {
         listenWhen: (previous, current) =>
             current.status == RequestStatus.success,
         listener: (context, state) {
-          Navigator.of(context).pushReplacementNamed(AppRoutes.main);
+          final route = state.role == AppUserRole.partner
+              ? AppRoutes.partnerMain
+              : AppRoutes.main;
+          Navigator.of(context).pushReplacementNamed(route);
         },
         builder: (context, state) {
           return Scaffold(
@@ -103,6 +106,47 @@ class _AuthPageState extends State<AuthPage> {
                       style: TextStyle(
                         fontSize: AuthUiConstants.subtitleSize,
                         color: AppColors.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Войти как',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(
+                          AuthUiConstants.inputRadius,
+                        ),
+                        border: Border.all(color: AppColors.borderLight),
+                      ),
+                      child: SegmentedButton<AppUserRole>(
+                        segments: const [
+                          ButtonSegment<AppUserRole>(
+                            value: AppUserRole.client,
+                            label: Text('Клиент'),
+                            icon: Icon(Icons.person_outline_rounded),
+                          ),
+                          ButtonSegment<AppUserRole>(
+                            value: AppUserRole.partner,
+                            label: Text('Партнёр'),
+                            icon: Icon(Icons.storefront_outlined),
+                          ),
+                        ],
+                        selected: <AppUserRole>{state.role},
+                        onSelectionChanged: (values) {
+                          context.read<AuthCubit>().setRole(values.first);
+                        },
                       ),
                     ),
                     const SizedBox(height: 24),

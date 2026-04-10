@@ -4,7 +4,6 @@ import '../../../../app/navigation_extensions.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/review_result_colors.dart';
 import '../../domain/review_result.dart';
-import 'review_silk_decoration.dart';
 
 class ReviewResultSuccessBody extends StatelessWidget {
   const ReviewResultSuccessBody({super.key, required this.result});

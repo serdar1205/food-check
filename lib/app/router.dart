@@ -4,6 +4,7 @@ import '../features/auth/presentation/auth_page.dart';
 import '../features/splash/presentation/splash_page.dart';
 import 'di.dart';
 import 'main_shell_page.dart';
+import 'partner_shell_page.dart';
 
 class AppRoutes {
   static const splash = '/';
@@ -11,6 +12,9 @@ class AppRoutes {
 
   /// Primary post-login container (tabs + nested navigators).
   static const main = '/main';
+
+  /// Partner post-login container.
+  static const partnerMain = '/partner-main';
 
   /// Alias for [main] for legacy call sites.
   static const restaurants = '/restaurants';
@@ -43,6 +47,11 @@ class AppRouter {
       case AppRoutes.restaurants:
         return MaterialPageRoute<void>(
           builder: (_) => MainShellPage(dependencies: dependencies),
+          settings: settings,
+        );
+      case AppRoutes.partnerMain:
+        return MaterialPageRoute<void>(
+          builder: (_) => PartnerShellPage(dependencies: dependencies),
           settings: settings,
         );
       default:

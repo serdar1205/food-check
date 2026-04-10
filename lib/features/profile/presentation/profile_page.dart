@@ -105,10 +105,10 @@ class _ProfilePageState extends State<ProfilePage> {
         title: Text(
           'Профиль',
           style: TextStyle(
-           // fontFamily: 'serif',
+            // fontFamily: 'serif',
             fontSize: 22,
             fontWeight: FontWeight.w600,
-          //  color: ProfileScreenColors.olive,
+            //  color: ProfileScreenColors.olive,
           ),
         ),
         actions: [

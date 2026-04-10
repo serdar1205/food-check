@@ -3,6 +3,16 @@ import '../features/auth/application/auth_cubit.dart';
 import '../features/auth/application/login_use_case.dart';
 import '../features/auth/data/auth_repository_impl.dart';
 import '../features/auth/domain/auth_repository.dart';
+import '../features/partner_analytics/application/partner_dashboard_cubit.dart';
+import '../features/partner_analytics/data/partner_analytics_repository_impl.dart';
+import '../features/partner_analytics/domain/partner_analytics_repository.dart';
+import '../features/partner_branches/application/partner_branch_details_cubit.dart';
+import '../features/partner_branches/application/partner_branches_cubit.dart';
+import '../features/partner_branches/data/partner_branches_repository_impl.dart';
+import '../features/partner_branches/domain/partner_branches_repository.dart';
+import '../features/partner_quality_alerts/application/partner_quality_alerts_cubit.dart';
+import '../features/partner_quality_alerts/data/partner_quality_alerts_repository_impl.dart';
+import '../features/partner_quality_alerts/domain/partner_quality_alerts_repository.dart';
 import '../features/gamification/application/gamification_cubit.dart';
 import '../features/gamification/data/gamification_repository_impl.dart';
 import '../features/gamification/domain/gamification_repository.dart';
@@ -62,6 +72,9 @@ class AppDependencies {
     final rewardsRepository = RewardsRepositoryImpl(profileRepository);
     final gamificationRepository = GamificationRepositoryImpl();
     final notificationsRepository = NotificationsRepositoryImpl();
+    final partnerAnalyticsRepository = PartnerAnalyticsRepositoryImpl();
+    final partnerBranchesRepository = PartnerBranchesRepositoryImpl();
+    final partnerQualityAlertsRepository = PartnerQualityAlertsRepositoryImpl();
     return AppDependencies._(
       splashMinDisplayDuration: splashMinDisplayDuration,
       authRepository: authRepository,
@@ -75,6 +88,9 @@ class AppDependencies {
       rewardsRepository: rewardsRepository,
       gamificationRepository: gamificationRepository,
       notificationsRepository: notificationsRepository,
+      partnerAnalyticsRepository: partnerAnalyticsRepository,
+      partnerBranchesRepository: partnerBranchesRepository,
+      partnerQualityAlertsRepository: partnerQualityAlertsRepository,
     );
   }
 
@@ -91,6 +107,9 @@ class AppDependencies {
     required this.rewardsRepository,
     required this.gamificationRepository,
     required this.notificationsRepository,
+    required this.partnerAnalyticsRepository,
+    required this.partnerBranchesRepository,
+    required this.partnerQualityAlertsRepository,
   });
 
   /// Minimum splash visibility; tests may pass [Duration.zero].
@@ -107,6 +126,9 @@ class AppDependencies {
   final RewardsRepository rewardsRepository;
   final GamificationRepository gamificationRepository;
   final NotificationsRepository notificationsRepository;
+  final PartnerAnalyticsRepository partnerAnalyticsRepository;
+  final PartnerBranchesRepository partnerBranchesRepository;
+  final PartnerQualityAlertsRepository partnerQualityAlertsRepository;
 
   CheckAuthorizationUseCase get _checkAuthorizationUseCase =>
       CheckAuthorizationUseCase(authRepository);
@@ -178,4 +200,16 @@ class AppDependencies {
 
   SettingsCubit createSettingsCubit() =>
       SettingsCubit(_getProfileUseCase, profileRepository);
+
+  PartnerDashboardCubit createPartnerDashboardCubit() =>
+      PartnerDashboardCubit(partnerAnalyticsRepository);
+
+  PartnerBranchesCubit createPartnerBranchesCubit() =>
+      PartnerBranchesCubit(partnerBranchesRepository);
+
+  PartnerBranchDetailsCubit createPartnerBranchDetailsCubit() =>
+      PartnerBranchDetailsCubit(partnerBranchesRepository);
+
+  PartnerQualityAlertsCubit createPartnerQualityAlertsCubit() =>
+      PartnerQualityAlertsCubit(partnerQualityAlertsRepository);
 }
