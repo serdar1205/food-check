@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../app/di.dart';
+import '../../../app/widgets/fake_line_chart.dart';
 import '../../../core/application/request_status.dart';
 import '../../../core/theme/partner_theme.dart';
 import '../application/partner_branch_details_cubit.dart';
@@ -42,7 +43,6 @@ class _PartnerBranchDetailsPageState extends State<PartnerBranchDetailsPage> {
     return BlocProvider<PartnerBranchDetailsCubit>.value(
       value: _cubit,
       child: Scaffold(
-
         body: BlocBuilder<PartnerBranchDetailsCubit, PartnerBranchDetailsState>(
           builder: (context, state) {
             if (state.status == RequestStatus.loading) {
@@ -56,17 +56,18 @@ class _PartnerBranchDetailsPageState extends State<PartnerBranchDetailsPage> {
               return const SizedBox.shrink();
             }
             return Scaffold(
-              appBar: AppBar(title:  Text(
-                d.branchName,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+              appBar: AppBar(
+                title: Text(
+                  d.branchName,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),),
+              ),
               body: ListView(
                 padding: const EdgeInsets.all(PartnerTheme.pagePadding),
                 children: [
-
                   Wrap(
                     spacing: 8,
                     children: [
@@ -109,8 +110,13 @@ class _PartnerBranchDetailsPageState extends State<PartnerBranchDetailsPage> {
                   Container(
                     height: 120,
                     decoration: PartnerTheme.cardDecoration(),
-                    alignment: Alignment.center,
-                    child: const Text('График изменений (demo)'),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8),
+                      child: FakeLineChart(
+                        points: [7.2, 7.6, 7.4, 7.8, 7.7, 8.0, 8.1],
+                        xLabels: ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7'],
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   const Text(

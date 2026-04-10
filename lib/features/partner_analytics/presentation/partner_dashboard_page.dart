@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../app/di.dart';
+import '../../../app/widgets/fake_line_chart.dart';
 import '../../../app/widgets/partner_card.dart';
 import '../../../core/application/request_status.dart';
 import '../../../core/theme/app_colors.dart';
@@ -102,11 +103,9 @@ class _PartnerDashboardPageState extends State<PartnerDashboardPage> {
                 SizedBox(
                   height: 120,
                   child: PartnerCard(
-                    child: Center(
-                      child: Text(
-                        'График динамики (demo)',
-                        style: TextStyle(color: AppColors.textSecondary),
-                      ),
+                    child: const FakeLineChart(
+                      points: [3.9, 4.1, 4.0, 4.2, 4.3, 4.25, 4.4],
+                      xLabels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7'],
                     ),
                   ),
                 ),
